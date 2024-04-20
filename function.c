@@ -84,27 +84,6 @@ int greatvalue(COLUMN *col,int val)
     }
     return occ;
 }
-/* ameliorated version test
-{
-
-    int occ=0,pre=0;
-    for(int i=0;i<col->ls;i++)
-    {
-        if(col->data[i]>=val && occurences(col,col->data[i])==1)
-        {
-            occ++;
-        }
-        else if(col->data[i]>=val && occurences(col,col->data[i])!=1)
-        {
-            if (pre==0)
-            {
-                occ++;
-            }
-            pre++;
-        }
-    }
-    return occ;
-}*/
 
 int lessvalue(COLUMN *col,int val)
 {
@@ -118,36 +97,6 @@ int lessvalue(COLUMN *col,int val)
     }
     return occ;
 }
-/* ameliorated version test
-{
-    int *pre =(int*)malloc(col->ls * sizeof(int));
-    int occ=0,po=0,j=0;
-    for(int i=0;i<col->ls;i++)
-    {
-        if(col->data[i]<=val && occurences(col,col->data[i])==1)
-        {
-            occ++;
-        }
-        else if(col->data[i]<=val && occurences(col,col->data[i])!=1)
-        {
-            do
-            {
-                j++;
-                if(pre[j]==col->data[i])
-                {
-                    po++;
-                }
-            }
-            while(pre[j]!=col->data[i]);
-            if(po==0)
-            {
-                occ++;
-            }
-            pre++;
-        }
-    }
-    return occ;
-}*/
 
 
 // Cdataframe part
@@ -213,11 +162,6 @@ void hardFillDataframe(CDATAFRAME *cd)
 
 void display_all_cdata(CDATAFRAME *cd)
 {
-    for(int i=0;i<cd->ls;i++)
-    {
-        printf("%s ",cd->data[i].name);
-    }
-    printf("\n");
     for(int k=0;k<cd->rows;k++)
     {
         for(int j=0;j<cd->ls;j++)
@@ -230,11 +174,6 @@ void display_all_cdata(CDATAFRAME *cd)
 
 void display_part_rows(CDATAFRAME *cd, int start,int end)
 {
-    for(int i=0;i<cd->ls;i++)
-    {
-        printf("%s ",cd->data[i].name);
-    }
-    printf("\n");
     for(int k=start;k<end;k++)
     {
         for(int j=0;j<cd->ls;j++)
@@ -247,11 +186,6 @@ void display_part_rows(CDATAFRAME *cd, int start,int end)
 
 void display_part_col(CDATAFRAME *cd,int start,int end)
 {
-    for(int i=start;i<end;i++)
-    {
-        printf("%s ",cd->data[i].name);
-    }
-    printf("\n");
     for(int k=0;k<cd->rows;k++)
     {
         for(int j=start;j<end;j++)
@@ -260,4 +194,161 @@ void display_part_col(CDATAFRAME *cd,int start,int end)
         }
         printf("\n");
     }
+}
+
+//supplementary function : USUAL OPERATIONS
+void add_rows_val(CDATAFRAME *cd,int num)
+{
+    int fin=cd->rows+num+1;
+    int value =0;
+    for (int i = 0; i <cd->ls; i++)
+    {
+        printf("what are the %d new values you want in this column ?",num);
+        for (int j = cd->rows; j < fin; j++)
+        {
+            scanf("%d", &value);
+            insert_value(cd->data[i].data[j], value);
+        }
+    }
+    cd->rows+=num;
+}
+
+void delete_rows_val(CDATAFRAME*cd,int ind)
+{
+    int start=ind,temp=0;
+    for(int i=start;i<cd->rows;i++)
+    {
+        for (int j = 0; j < cd->ls; j++)
+        {
+            temp = cd->data[j].data[i];
+            cd->data[j].data[i] = cd->data[j].data[i + 1];
+            cd->data[j].data[i + 1] = temp;
+        }
+        ind++;
+    }
+    for(int k=0;k<cd->ls;k++)
+    {
+        free(cd->data[k].data[cd->rows]);
+    }
+    cd->rows--;
+}
+
+void add_col_cdata(CDATAFRAME *cd,int num)
+{
+    int value =0;
+    char name[100];
+    for (int i = cd->ls; i <(cd->ls)+num; i++)
+    {
+        printf("what is the name of the column at the index %d ?\n", i + 1);
+        scanf("%s", name);
+        COLUMN *col = create_column(name);
+        insert_column(cd, col);
+        printf("what are the %d values you want in the column ?", cd->rows);
+        for (int j = 0; j < cd->rows; j++) {
+            scanf("%d", &value);
+            insert_value(col, value);
+        }
+    }
+    cd->ls+=num;
+}
+
+void delete_col_val(CDATAFRAME*cd,int ind)
+{
+    int start=ind,temp=0;
+    for(int i=start;i<cd->ls;i++)
+    {
+        for (int j = 0; j < cd->rows; j++)
+        {
+            temp = cd->data[i].data[j];
+            cd->data[i].data[j] = cd->data[i+1].data[j];
+            cd->data[i+1].data[j] = temp;
+        }
+        ind++;
+    }
+    delete_column(*cd->data[cd->ls].data);
+    cd->ls--;
+}
+
+int exist_val(CDATAFRAME*cd,int val)
+{
+    for(int i=0;i<cd->ls;i++)
+    {
+        if(occurences(&cd->data[i],val)>=1)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void access_cell(CDATAFRAME*cd,int ord,int abs)
+{
+    printf("the value at the row %d and col %d is %d",abs,ord,cd->data[ord].data[abs]);
+}
+
+void replace_cell(CDATAFRAME*cd,int ord,int abs)
+{
+    int num=0;
+    printf("By which number do you want to change it ?\n ");
+    scanf("%d",&num);
+    cd->data[ord].data[abs]=num;
+}
+
+void rename_title(CDATAFRAME *cd,int ind)
+{
+    char title[100];
+    printf("what is the new title of the column at the index %d ?\n",ind);
+    scanf("%s",title);
+    cd->data[ind].name=title;
+}
+
+void display_name(CDATAFRAME *cd)
+{
+    for(int i=0;i<cd->ls;i++)
+    {
+        printf("%s ",cd->data[i].name);
+    }
+    printf("\n");
+}
+
+//supplementary function :ANALYSIS AND STATISTICS
+void num_rows(CDATAFRAME *cd)
+{
+    printf("%d",cd->rows);
+}
+
+void num_col(CDATAFRAME *cd)
+{
+    printf("%d",cd->ls);
+}
+
+void num_equal(CDATAFRAME*cd,int val)
+{
+    //occurences(COLUMN *col,int val)
+    int num =0;
+    for(int i=0;i<cd->ls;i++)
+    {
+        num += occurences(&cd->data[i],val);
+    }
+    printf("%d",num);
+}
+
+void num_great(CDATAFRAME*cd,int val)
+{
+    int num =0;
+    for(int i=0;i<cd->ls;i++)
+    {
+        num +=greatvalue(&cd->data[i],val);
+    }
+    printf("%d",num);
+}
+
+void num_lower(CDATAFRAME*cd,int val)
+{
+    int num =0;
+    for(int i=0;i<cd->ls;i++)
+    {
+        num +=lessvalue(&cd->data[i],val);
+    }
+    printf("%d",num);
 }

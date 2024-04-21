@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-#include "function.h"
+#include "column.h"
 int main()
 {
     /* TEST PREMIERE PARTIE

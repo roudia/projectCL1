@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include "column.h"
+#include "cdataframe.h"
 int main()
 {
     /* TEST PREMIERE PARTIE

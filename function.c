@@ -1,16 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "column.h"
+#include "cdataframe.h"
 #define REALOC_SIZE 256
 // FIRST PART OF THE PROJECT
 // creation of a struct
-typedef struct
-{
-    char *name;
-    int ls;
-    int ps;
-    int *data;
-}COLUMN;
 
 //initialisation of a column
 COLUMN *create_column(char *title)
@@ -101,13 +96,6 @@ int lessvalue(COLUMN *col,int val)
 
 // Cdataframe part
 //definition of a new type
-typedef struct
-{
-    int ls;
-    int ps;
-    int rows;
-    COLUMN *data;
-}CDATAFRAME;
 
 // initialisation of cdataframe
 CDATAFRAME *createEmptyDataframe()
@@ -174,7 +162,7 @@ void display_all_cdata(CDATAFRAME *cd)
 
 void display_part_rows(CDATAFRAME *cd, int start,int end)
 {
-    for(int k=start;k<end;k++)
+    for(int k=start-1;k<end;k++)
     {
         for(int j=0;j<cd->ls;j++)
         {
@@ -188,7 +176,7 @@ void display_part_col(CDATAFRAME *cd,int start,int end)
 {
     for(int k=0;k<cd->rows;k++)
     {
-        for(int j=start;j<end;j++)
+        for(int j=start-1;j<end;j++)
         {
             printf("%d\t ",cd->data[j].data[k]);
         }

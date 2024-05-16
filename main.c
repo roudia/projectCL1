@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-#include "column.h"
 #include "cdataframe.h"
 int main()
 {
@@ -35,12 +34,11 @@ int main()
     display_part_rows(df,1,2);
 
     //adding a row and a col
-    //add_rows_val(df,2);
+    add_rows_val(df,2);
     add_col_cdata(df,1);
 
     //check if a value exist ,change a number and a title
-    printf("%d\n",exist_val(df,3));
-    if (exist_val(df,3)==1){
+    if (exist_val(df,3)>=1){
         printf("The value 3 is in the dataframe\n");
         replace_cell(df,2,2);
     }
@@ -48,12 +46,13 @@ int main()
         printf("not in the dataframe\n");
     }
 
+    display_all_cdata(df);
     rename_title(df,2);
 
     // Free allocated memory
-    for (int i = 0; i < df->ls; i++) {
+    /*for (int i = df->ls; i >0; i--) {
         delete_column(&(df->data[i]));
     }
-
+     */
     return 0;
 }

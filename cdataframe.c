@@ -248,13 +248,7 @@ void num_equal(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        for(int j=0;j<cd->rows;i++)
-        {
-            if(cd->data[i].data[j]==val)
-            {
-                num++;
-            }
-        }
+        num += occurences(&cd->data[i],val);
     }
     printf("%d\n",num);
 }
@@ -264,13 +258,7 @@ void num_great(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        for(int j=0;j<cd->rows;i++)
-        {
-            if(cd->data[i].data[j]>=val)
-            {
-                num++;
-            }
-        }
+        num +=greatvalue(&cd->data[i],val);
     }
     printf("%d\n",num);
 }
@@ -280,13 +268,7 @@ void num_lower(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        for(int j=0;j<cd->rows;i++)
-        {
-            if(cd->data[i].data[j]<=val)
-            {
-                num++;
-            }
-        }
+        num +=lessvalue(&cd->data[i],val);
     }
     printf("%d\n",num);
 }

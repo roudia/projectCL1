@@ -1,3 +1,9 @@
+/* NAME:cdataframe.c
+* AUTHORS:Annabelle Larvor but mostly Judia Ouazari
+ * ROLE :All function related to the manipulation of the cdataframe used in the main
+ * that correspond to the part 2 of the part 1 of the project.
+ * */
+
 #include <stdio.h>
 #include <stdlib.h>
 //#include <string.h>
@@ -35,15 +41,17 @@ int insert_column(CDATAFRAME *cd, COLUMN *list)
     return 1;
 }
 
+//check if an input is really an integer and return the value if it is the case
 int get_int_input() {
     int value;
     while (scanf("%d", &value) != 1) {
-        while (getchar() != '\n');  // Vider le tampon d'entrée
+        while (getchar() != '\n') // Vider le tampon d'entrée
         printf("Invalid input. Please enter a number: ");
     }
     return value;
 }
 
+// most important function that fill all the dataframe to the name of the column to the value
 void hardFillDataframe(CDATAFRAME *cd)
 {
     char name[100];
@@ -67,6 +75,7 @@ void hardFillDataframe(CDATAFRAME *cd)
     }
 }
 
+//print all the data
 void display_all_cdata(CDATAFRAME *cd)
 {
     for(int k=0;k<cd->rows;k++)
@@ -79,6 +88,7 @@ void display_all_cdata(CDATAFRAME *cd)
     }
 }
 
+//display only a part of the cdataframe either the column or the rows
 void display_part_rows(CDATAFRAME *cd, int start,int end)
 {
     for(int k=start-1;k<end;k++)
@@ -104,6 +114,7 @@ void display_part_col(CDATAFRAME *cd,int start,int end)
 }
 
 //supplementary function : USUAL OPERATIONS
+// add or delete a part of the value to the cdataframe either rows or value
 void add_rows_val(CDATAFRAME *cd,int num)
 {
     int start=cd->rows;
@@ -123,19 +134,17 @@ void add_rows_val(CDATAFRAME *cd,int num)
 void delete_rows_val(CDATAFRAME*cd,int ind)
 {
     int temp=0;
-    for(int i=ind;i<cd->rows;i++)
+    for(int i=ind;i<cd->rows-1;i++)
     {
-        for (int j = 0; j < cd->ls; j++)
-        {
+        for (int j = 0; j < cd->ls; j++) {
             temp = cd->data[j].data[i];
             cd->data[j].data[i] = cd->data[j].data[i + 1];
             cd->data[j].data[i + 1] = temp;
         }
-        ind++;
     }
-    for(int k=cd->ls;k>0;k--)
-    {
-        free(&cd->data[k].data[cd->rows]);
+    for(int k=cd->ls;k>0;k--) {
+        cd->data[k].data = (int*)realloc(cd->data[k].data, (cd->rows- 1) * sizeof(int));
+        cd->data[k].ls--;
     }
     cd->rows--;
 }
@@ -162,7 +171,7 @@ void add_col_cdata(CDATAFRAME *cd,int num)
 void delete_col_val(CDATAFRAME**cd,int ind)
 {
     int temp=0;
-    for(int i=ind;i<(*cd)->ls;i++)
+    for(int i=ind;i<(*cd)->ls-1;i++)
     {
         for (int j = 0; j < (*cd)->rows; j++)
         {
@@ -172,11 +181,11 @@ void delete_col_val(CDATAFRAME**cd,int ind)
         }
         ind++;
     }
-    delete_column(&(*cd)->data[(*cd)->ls]);
     (*cd)->data = (COLUMN*)realloc((*cd)->data, ((*cd)->ls- 1) * sizeof(COLUMN));
     (*cd)->ls--;
 }
 
+//check some information in link with an entered value
 int exist_val(CDATAFRAME*cd,int val)
 {
 
@@ -239,7 +248,13 @@ void num_equal(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        num += occurences(&cd->data[i],val);
+        for(int j=0;j<cd->rows;i++)
+        {
+            if(cd->data[i].data[j]==val)
+            {
+                num++;
+            }
+        }
     }
     printf("%d\n",num);
 }
@@ -249,7 +264,13 @@ void num_great(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        num +=greatvalue(&cd->data[i],val);
+        for(int j=0;j<cd->rows;i++)
+        {
+            if(cd->data[i].data[j]>=val)
+            {
+                num++;
+            }
+        }
     }
     printf("%d\n",num);
 }
@@ -259,7 +280,13 @@ void num_lower(CDATAFRAME*cd,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
-        num +=lessvalue(&cd->data[i],val);
+        for(int j=0;j<cd->rows;i++)
+        {
+            if(cd->data[i].data[j]<=val)
+            {
+                num++;
+            }
+        }
     }
     printf("%d\n",num);
 }

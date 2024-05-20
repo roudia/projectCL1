@@ -1,5 +1,12 @@
+/* NAME:main.c
+* AUTHORS: Judia Ouazari
+ * ROLE : file that make the link between the code and the user by using and testing all functions.
+ * */
+
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "cdataframe.h"
 
 int main()
@@ -123,7 +130,7 @@ int main()
                 printf("to which value do you want to compare?");
                 scanf("%d",&x);
                 printf("do you want to find the number of equivalent value(1),greater value(2) or the lower value (3)");
-                scanf("%d",choix);
+                scanf("%d",&choix);
                 if(choix ==1) {
                     num_equal(df,x);
                 }
@@ -152,11 +159,14 @@ int main()
         }
         else if(ques=='e')
         {
-            int i;
-            for(i=df->ls;i>=0;i--);
+            for(int i=df->ls;i>=0;i--)
             {
+                printf("hello");
                 delete_column(&df->data[i]);
             }
+            free(&df);
+            df = NULL;
+            printf("winner");
         }
     }while(ques!='e');
     return 0;

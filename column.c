@@ -1,3 +1,12 @@
+/* NAME:column.c
+ * AUTHORS: Annabelle Larvor & Judia Ouazari
+ * ROLE : All function related to the manipulation of a structure named column
+ * that is the first part of the project and will be later use in the cdataframe structure
+ * which is the means of the project.
+ * */
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,7 +45,9 @@ int insert_value(COLUMN *col, int value)
 void delete_column(COLUMN *col)
 {
     free(col->data);
+    col->data = NULL;
     free(col);
+    col = NULL;
 }
 
 //print the value

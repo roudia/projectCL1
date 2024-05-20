@@ -1,3 +1,9 @@
+/* NAME:cdataframe.h
+* AUTHORS:Annabelle Larvor and judia ouazari
+ * ROLE :File that contains the prototypes of the cdataframe.c file and make the main.c one
+ * able to make work the function
+ * */
+
 #include "column.h"
 
 typedef struct

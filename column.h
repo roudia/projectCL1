@@ -1,3 +1,9 @@
+/* NAME:column.h
+* AUTHORS: Annabelle Larvor and Judia Ouazari
+ * ROLE :File that contains all the prototype of the function present in the column.c file
+ * and make them work in the main.c .
+ * */
+
 
 typedef struct
 {

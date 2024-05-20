@@ -21,7 +21,9 @@ and for the general dataframe (with the prototypes in the cdataframe.h file).
 
 ==== Process ====
 *The project was realize on clion and transfered later on the github repossitory.
-*The different part of the project was separated and designated for a member of the group for a certain period of time.
+*The different part of the project was separated and designated for a member of the group for a certain period of time and was mixed on one cumputer.
 
 ==== Start the code ====
-*(I think)Install the files and use a programmation program (like github desktop or Clion)to launch it and see the result.(if there is one)  
+*(I think)Install the files and use a programmation program (like github desktop or Clion)to launch it and see the result.(if there is one) 
+*in the case that the files doesn't work try creating yourself a project and copy paste all the content of our file in the new ones.(and pray that it works)
+*if nothing work we're sorry we can do nothing but at least it work on one cumputer even if the one that it work is the problematic one.(please take this in consideration) ;)

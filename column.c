@@ -33,11 +33,11 @@ int insert_value(COLUMN *col, int value)
 
 
 // free the allocated space of the collumn (delete it)
-/*void delete_column(COLUMN **col)
+void delete_column(COLUMN *col)
 {
-    free((*col)->data);
-    free(*col);
-}*/
+    free(col->data);
+    free(col);
+}
 
 //print the value
 void print_col(COLUMN *col)
@@ -92,4 +92,3 @@ int lessvalue(COLUMN *col,int val)
     }
     return occ;
 }
-

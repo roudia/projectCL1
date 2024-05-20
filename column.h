@@ -9,7 +9,7 @@ typedef struct
 
 COLUMN *create_column(char *);
 int insert_value(COLUMN *, int );
-void delete_column(COLUMN **);
+void delete_column(COLUMN *);
 void print_col(COLUMN *);
 int occurences(COLUMN *,int );
 int returnvalue(COLUMN *,int );

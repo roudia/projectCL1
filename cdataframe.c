@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
 #include "cdataframe.h"
-#include "column.h"
+
 #define REALOC_SIZE 256
 // Cdataframe part
 //definition of a new type
@@ -35,25 +35,34 @@ int insert_column(CDATAFRAME *cd, COLUMN *list)
     return 1;
 }
 
+int get_int_input() {
+    int value;
+    while (scanf("%d", &value) != 1) {
+        while (getchar() != '\n');  // Vider le tampon d'entrée
+        printf("Invalid input. Please enter a number: ");
+    }
+    return value;
+}
+
 void hardFillDataframe(CDATAFRAME *cd)
 {
-    int obj=0,value=0;
     char name[100];
-    printf("how many column do you plan to put ?");
-    scanf("%d",&obj);
+    printf("how many column do you plan to put ?\n");
+    int obj =get_int_input();
     printf("With how many rows ?\n");
-    scanf("%d",&cd->rows);
+    cd->rows =get_int_input();
     for (int i = 0; i <obj; i++)
     {
         printf("what is the name of the column at the index %d ?\n",i+1);
         scanf("%s",name);
         COLUMN *col = create_column(name);
         insert_column(cd,col);
-        printf("what are the %d values you want in the column ?",cd->rows);
+        printf("what are the %d values you want in the column ?\n",cd->rows);
         for(int j=0;j<cd->rows;j++)
         {
-            scanf("%d",&value);
-            insert_value(col,value);
+            printf("Value for row %d:", j + 1);
+            int value = get_int_input();
+            insert_value(col, value);
         }
     }
 }
@@ -111,10 +120,10 @@ void add_rows_val(CDATAFRAME *cd,int num)
     cd->rows+=num;
 }
 
-/*void delete_rows_val(CDATAFRAME*cd,int ind)
+void delete_rows_val(CDATAFRAME*cd,int ind)
 {
-    int start=ind,temp=0;
-    for(int i=start;i<cd->rows;i++)
+    int temp=0;
+    for(int i=ind;i<cd->rows;i++)
     {
         for (int j = 0; j < cd->ls; j++)
         {
@@ -124,13 +133,13 @@ void add_rows_val(CDATAFRAME *cd,int num)
         }
         ind++;
     }
-    for(int k=0;k<cd->ls;k++)
+    for(int k=cd->ls;k>0;k--)
     {
-        free(cd->data[k].data[cd->rows]);
+        free(&cd->data[k].data[cd->rows]);
     }
     cd->rows--;
 }
-*/
+
 void add_col_cdata(CDATAFRAME *cd,int num)
 {
     int value =0, obj=(cd->ls)+num;
@@ -150,26 +159,27 @@ void add_col_cdata(CDATAFRAME *cd,int num)
     cd->ls+=num;
 }
 
-/*void delete_col_val(CDATAFRAME*cd,int ind)
+void delete_col_val(CDATAFRAME**cd,int ind)
 {
-    int start=ind,temp=0;
-    for(int i=start;i<cd->ls;i++)
+    int temp=0;
+    for(int i=ind;i<(*cd)->ls;i++)
     {
-        for (int j = 0; j < cd->rows; j++)
+        for (int j = 0; j < (*cd)->rows; j++)
         {
-            temp = cd->data[i].data[j];
-            cd->data[i].data[j] = cd->data[i+1].data[j];
-            cd->data[i+1].data[j] = temp;
+            temp = (*cd)->data[i].data[j];
+            (*cd)->data[i].data[j] = (*cd)->data[i+1].data[j];
+            (*cd)->data[i+1].data[j] = temp;
         }
         ind++;
     }
-    delete_column(*cd->data[cd->ls].data);
-    cd->ls--;
+    delete_column(&(*cd)->data[(*cd)->ls]);
+    (*cd)->data = (COLUMN*)realloc((*cd)->data, ((*cd)->ls- 1) * sizeof(COLUMN));
+    (*cd)->ls--;
 }
-*/
+
 int exist_val(CDATAFRAME*cd,int val)
 {
-    int occ=0;
+
     for(int i=0;i<cd->ls;i++)
     {
         for(int j=0;j<cd->rows;j++)
@@ -216,23 +226,22 @@ void display_name(CDATAFRAME *cd)
 //supplementary function :ANALYSIS AND STATISTICS
 void num_rows(CDATAFRAME *cd)
 {
-    printf("%d",cd->rows);
+    printf("%d\n",cd->rows);
 }
 
 void num_col(CDATAFRAME *cd)
 {
-    printf("%d",cd->ls);
+    printf("%d\n",cd->ls);
 }
 
 void num_equal(CDATAFRAME*cd,int val)
 {
-    //occurences(COLUMN *col,int val)
     int num =0;
     for(int i=0;i<cd->ls;i++)
     {
         num += occurences(&cd->data[i],val);
     }
-    printf("%d",num);
+    printf("%d\n",num);
 }
 
 void num_great(CDATAFRAME*cd,int val)
@@ -242,7 +251,7 @@ void num_great(CDATAFRAME*cd,int val)
     {
         num +=greatvalue(&cd->data[i],val);
     }
-    printf("%d",num);
+    printf("%d\n",num);
 }
 
 void num_lower(CDATAFRAME*cd,int val)
@@ -252,5 +261,5 @@ void num_lower(CDATAFRAME*cd,int val)
     {
         num +=lessvalue(&cd->data[i],val);
     }
-    printf("%d",num);
+    printf("%d\n",num);
 }
